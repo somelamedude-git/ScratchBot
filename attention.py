@@ -22,5 +22,10 @@ class SelfAttention:
     K = torch.matmul(embedding, self.key_weight)
     V = torch.matmul(embedding, self.value_weight)
 
-    
+    attention_score = torch.matmul(Q, torch.transpose(K, 0, 1))
+    attention_score = attention_score/torch.sqrt(K.shape[-1])
 
+    attention_weights = torch.softmax(attention_score, dim=-1)
+    output = torch.matmul(attention_weights, V)
+
+    return output
