@@ -1,4 +1,20 @@
 import torch
+import re
+from collections import Counter
+
+class BPETokenizer:
+  def __init__(self):
+    self.word_dict = {}
+    self.char_dict = {}
+
+  def uniqueWords(self, corpus):
+    all_words = re.findall(r'\w+', corpus)
+    self.word_dict = Counter(all_words)
+
+  def charactersSep(self):
+    for word, val in self.word_dict.items():
+      chars = tuple(word)
+      self.char_dict[chars] = val
 
 class SelfAttention:
   def __init__(self, attention_dim, embedding_dim):
