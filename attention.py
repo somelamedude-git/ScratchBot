@@ -1,6 +1,6 @@
 import torch
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 import heapq
 
 class BPETokenizer:
@@ -10,7 +10,7 @@ class BPETokenizer:
     self.char_dict = {}
     self.merges = {}
     self.word_freqs = {}
-    self.vocab = {}
+    self.vocab = set()
 
   def build_corpus(self, corpus):
     all_words = re.findall(r'\w+|[^\w\s]', corpus)
@@ -20,6 +20,21 @@ class BPETokenizer:
       symbols = tuple(list(word) + ['</w>'])
       self.char_dict[word_id] = symbols
       self.word_freqs[word_id] = count
+
+  def train(self, corpus):
+    self.build_corpus(corpus)
+    self.vocab = {char for symbols in self.char_dict.valyes() for char in symbols}
+
+    pair_counts = Counter()
+    inverted_index = defaultdict(set)
+
+    for word_id, symbols in self.char_dict.items():
+      freq = self.word_freqs[word_id]
+      for i in range(len(symbols)-1):
+        pair = (symbols[i], symbols[i+1])
+        pair_counts[pair] += freq
+        inverted_index[pair].add(word_id)
+
 
 class SelfAttention:
   def __init__(self, attention_dim, embedding_dim):
