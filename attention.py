@@ -1,20 +1,25 @@
 import torch
 import re
 from collections import Counter
+import heapq
 
 class BPETokenizer:
-  def __init__(self):
+  def __init__(self, vocab_size):
+    self.vocab_size = vocab_size
     self.word_dict = {}
     self.char_dict = {}
+    self.merges = {}
+    self.word_freqs = {}
+    self.vocab = {}
 
-  def uniqueWords(self, corpus):
-    all_words = re.findall(r'\w+', corpus)
+  def build_corpus(self, corpus):
+    all_words = re.findall(r'\w+|[^\w\s]', corpus)
     self.word_dict = Counter(all_words)
 
-  def charactersSep(self):
-    for word, val in self.word_dict.items():
-      chars = tuple(word)
-      self.char_dict[chars] = val
+    for word_id, (word, count) in enumerate(self.word_dict.items()):
+      symbols = tuple(list(word) + ['</w>'])
+      self.char_dict[word_id] = symbols
+      self.word_freqs[word_id] = count
 
 class SelfAttention:
   def __init__(self, attention_dim, embedding_dim):
