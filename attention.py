@@ -23,7 +23,7 @@ class BPETokenizer:
 
   def train(self, corpus):
     self.build_corpus(corpus)
-    self.vocab = {char for symbols in self.char_dict.valyes() for char in symbols}
+    self.vocab = {char for symbols in self.char_dict.values() for char in symbols}
 
     pair_counts = Counter()
     inverted_index = defaultdict(set)
@@ -35,6 +35,16 @@ class BPETokenizer:
         pair_counts[pair] += freq
         inverted_index[pair].add(word_id)
 
+    heap = [(-count, pair) for pair, count in pair_counts.items()]
+    heapq.heapify(heap)
+    merge_count = self.vocab_size-len(self.vocab)+1
+
+    for i in range(merge_count):
+
+
+
+
+      
 
 class SelfAttention:
   def __init__(self, attention_dim, embedding_dim):
